@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invitación de San Valentín</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #ffebee;
+            text-align: center;
+            padding: 50px;
+        }
+        h1 {
+            color: #d32f2f;
+        }
+        img, video {
+            width: 600px; /* Mismo tamaño que el video */
+            height: 400px; /* Mismo tamaño que el video */
+            margin: 20px auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        button {
+            padding: 20px 30px;
+            font-size: 16px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #yesButton {
+            background-color: #4caf50;
+            color: white;
+        }
+        #noButton {
+            background-color: #f44336;
+            color: white;
+        }
+        #videoContainer {
+            display: none; /* Ocultar el video inicialmente */
+        }
+        #mensajeNo {
+            display: none;
+            font-size: 24px;
+            color: #000000;
+            margin-top: 30px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Nosotros no celebramos el 14 nosotros celebramos el 15 ¿quieres salir?</h1>
+    <!-- Contenedor para la imagen -->
+    <img id="valentineImage" src="https://i.pinimg.com/736x/97/56/c9/9756c9db41f897cc85edfdcdefd4a6fb.jpg" alt="Imagen de San Valentín">
+
+    <!-- Contenedor para el video -->
+    <div id="videoContainer">
+        <video id="localVideo" controls loop>
+            <source src="Gato bailando (plantilla).mp4" type="video/mp4"> <!-- Cambia "tu-video.mp4" por el nombre de tu archivo -->
+            Tu navegador no soporta el elemento de video.
+        </video>
+    </div>
+    <br>
+    <button id="yesButton">Sí causa</button>
+    <button id="noButton">No causa</button>
+
+    <audio id="happySound" src="Bee Gees Stayin Alive (Extended Remaster).mp3"></audio>
+    <audio id="sadSound" src="XXXTENTACION - Jocelyn Flores (Audio).mp3"></audio>
+    <p id="mensajeNo">COMO QUE NO CAUSA:"v</p>
+    <script>
+        // Array de URLs de imágenes
+        const images = [
+            "https://i.pinimg.com/736x/9b/09/4e/9b094e3e183391dc5183d6b9501c0e13.jpg",
+            "https://i.pinimg.com/736x/cf/9b/e4/cf9be4da5184b0e37e655eaa9c33438d.jpg",
+            "https://i.pinimg.com/736x/fa/07/2b/fa072bf1999d9e94c249f81fe3966e37.jpg",
+            "https://i.pinimg.com/736x/d6/c9/cb/d6c9cb3e2b5401f7acb2c3afbdb2ee5a.jpg"
+        ];
+
+        // Obtener elementos del DOM
+        const valentineImage = document.getElementById("valentineImage");
+        const noButton = document.getElementById("noButton");
+        const yesButton = document.getElementById("yesButton");
+        const videoContainer = document.getElementById("videoContainer");
+        const localVideo = document.getElementById("localVideo");
+        const happySound = document.getElementById("happySound");
+        const sadSound = document.getElementById("sadSound");
+        const mensajeNo = document.getElementById("mensajeNo");
+
+        // Contador para cambiar la imagen
+        let imageIndex = 0;
+
+        // Función para cambiar la imagen al hacer clic en "No"
+        noButton.addEventListener("click", () => {
+            imageIndex = (imageIndex + 1) % images.length; // Cambiar al siguiente índice
+            valentineImage.src = images[imageIndex]; // Cambiar la imagen
+                        videoContainer.style.display = "none";
+            valentineImage.style.display = "block";
+
+            // Pausar el video
+            localVideo.pause();
+            sadSound.play();
+            happySound.pause()
+            mensajeNo.style.display = "block";
+            
+        });
+
+        // Función para mostrar y reproducir el video local al hacer clic en "Sí"
+        yesButton.addEventListener("click", () => {
+            // Ocultar la imagen
+            valentineImage.style.display = "none";
+
+            // Mostrar el contenedor del video
+            videoContainer.style.display = "block";
+            sadSound.pause();
+            happySound.play();
+            // Reproducir el video local
+            localVideo.play();
+            mensajeNo.style.display = "none";
+        });
+        document.getElementById("yesButton").addEventListener("click", () => {
+            fetch("http://localhost:3000/agregar-si", {
+                method: "POST"
+            })
+            .then(response => response.text())
+            .then(data => console.log(data))
+            .catch(error => console.error("Error:", error));
+        });
+        
+    </script>
+</body>
+</html>
